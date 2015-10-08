@@ -9,4 +9,6 @@ It contains:
 4. nn.py             - neural network with 2 layers, native python
 5. nn_theano.py      - neural network with 2 layers, ported to theano
 
+Note that the data, weights and biases are defined to fixed values in order to be able to compare the results.
+
 # Theano-examples
