@@ -1,7 +1,7 @@
 # Theano-examples
-This repository contains examples for beginners to learn theano. The examples are based on the Stanford CS231 class on http://cs231n.github.io/neural-networks-case-study/  .
+This repository contains examples for beginners to learn theano. The examples are coded once in native python and then ported step by step to Theano. All examples are based on the Stanford CS231 class on (convolutional) neural networks http://cs231n.github.io/neural-networks-case-study/  .
 
-It contains:
+Files in this repository:
 
 1. data.pickle       - file containing the data for a 2D toy example
 2. softmax.py        - softmax classifier, native python
