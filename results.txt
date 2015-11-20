@@ -1,0 +1,16 @@
+np64 iteration 19999: loss 0.767879
+-9.59487697627e-11
+
+thcpu64 iteration 19999: loss 0.767879
+-9.60481416623e-11
+
+thcpu32 iteration 19999: loss 0.767879
+-0.000147969
+
+thgpu32 iteration 19999: loss 0.767879
+-0.000530284
+
+tf32 iteration 19999: loss 0.767878
+-0.00114104
+
+

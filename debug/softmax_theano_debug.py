@@ -4,13 +4,15 @@ import theano
 import theano.tensor as T
 import pickle
 
-
-with open('data.pickle') as f:
+prec = 'float32'
+with open('../data.pickle') as f:
     X_inp, y_inp, W_inp, b_inp = pickle.load(f)
-
+X_inp=X_inp.astype(prec)
+W_inp=W_inp.astype(prec)
+b_inp=b_inp.astype(prec)
 num_examples = X_inp.shape[0]
 reg_inp = 1e-3
-training_steps = 200
+training_steps = 20000
 
 # Declare Theano symbolic variables
 X = T.matrix('X')

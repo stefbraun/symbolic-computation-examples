@@ -5,10 +5,14 @@ import pickle
 with open('data.pickle') as f:
     X, y, W, b = pickle.load(f)
 
+#X = np.float32(X)
+#W = np.float32(W)
+#b = np.float32(b)
+
 # some hyperparameters
 step_size = 1
 reg = 1e-3  # regularization strength
-training_steps = 200
+training_steps = 20000
 
 # gradient descent loop
 num_examples = X.shape[0]

@@ -1,0 +1,4 @@
+TF
+- only cuda 7.0 and cuDNN 6.5 supported
+- easier variable declaration, not vector/matrix distinction, no broadcasting required
+

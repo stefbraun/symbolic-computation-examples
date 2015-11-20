@@ -6,6 +6,7 @@ import theano
 
 with open('data.pickle') as f:
     X_inp, y_inp, cl1, cl2 = pickle.load(f)
+X_inp=np.float32(X_inp)
 
 D = 2  # dimensionality
 K = 3  # number of classes
@@ -39,6 +40,7 @@ for i in xrange(1000):
     hidden_layer = T.maximum(0, T.dot(X, W1) + b1)
 
     scores = T.dot(hidden_layer, W2) + b2
+
 
     # compute the class probabilities
     p_y_given_x = T.nnet.softmax(scores)  # same as probs

@@ -7,10 +7,13 @@ import pickle
 
 with open('data.pickle') as f:
     X_inp, y_inp, W_inp, b_inp = pickle.load(f)
+X_inp=np.float32(X_inp)
+W_inp=np.float32(W_inp)
+b_inp=np.float32(b_inp)
 
 num_examples = X_inp.shape[0]
 reg_inp = 1e-3
-training_steps = 200
+training_steps = 20000
 
 # Declare Theano symbolic variables
 X = T.matrix('X')
@@ -52,7 +55,7 @@ train = theano.function(inputs=[X, y, reg], outputs=[loss], updates=((W, W - gw)
 
 for i in xrange(training_steps):
     err = train(X_inp, y_inp, reg_inp)
-    print 'iteration %d', i
-    print err[0]
-    print np.sum(W_inp) + np.sum(b_inp)
+    csum_val = np.sum(W.get_value()) + np.sum(b.get_value())
+    print "iteration %d: loss %f" % (i, err[0])
+    print csum_val
 
