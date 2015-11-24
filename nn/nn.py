@@ -2,29 +2,34 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 
-with open('data.pickle') as f:
+# Number of training steps
+training_steps = 20000
+
+# Load data
+with open('../data.pickle') as f:
     X, y, cl1, cl2 = pickle.load(f)
+X = np.float32(X)
+num_examples = np.float32(X.shape[0])
+num_dimensions = X.shape[1]  # dimensionality
+num_labels = len(np.unique(y))  # number of classes
 
-D = 2 # dimensionality
-K = 3 # number of classes
-
-# initialize parameters randomly
+# Initialize parameters randomly
 h = 100  # size of hidden layer
-W = 0.01 * np.ones((D, h))
-b = np.zeros((1, h))
-W2 = 0.01 * np.eye(h, K)
-b2 = np.zeros((1, K))
+W1 = np.float32(0.01 * np.ones((num_dimensions, h)))
+b1 = np.float32(np.zeros((1, h)))
+W2 = np.float32(0.01 * np.eye(h, num_labels))
+b2 = np.float32(np.zeros((1, num_labels)))
 
-# some hyperparameters
-step_size = 1e-0
-reg = 1e-3  # regularization strength
+# Some hyperparameters
+step_size = np.float32(1e-0)
+reg = np.float32(1e-3)  # regularization strength
 
 # gradient descent loop
-num_examples = X.shape[0]
-for i in xrange(10000):
+
+for i in xrange(training_steps):
 
     # evaluate class scores, [N x K]
-    hidden_layer = np.maximum(0, np.dot(X, W) + b)  # note, ReLU activation
+    hidden_layer = np.maximum(0, np.dot(X, W1) + b1)  # note, ReLU activation
     scores = np.dot(hidden_layer, W2) + b2
 
     # compute the class probabilities
@@ -34,10 +39,10 @@ for i in xrange(10000):
     # compute the loss: average cross-entropy loss and regularization
     corect_logprobs = -np.log(probs[range(num_examples), y])
     data_loss = np.sum(corect_logprobs) / num_examples
-    reg_loss = 0.5 * reg * np.sum(W * W) + 0.5 * reg * np.sum(W2 * W2)
+    reg_loss = np.float32(0.5) * reg * np.sum(W1 * W1) + np.float32(0.5) * reg * np.sum(W2 * W2)
     loss = data_loss + reg_loss
-    if i % 1000 == 0:
-        print "iteration %d: loss %f" % (i, loss)
+    #if i % 1000 == 0:
+    print "iteration %d: loss %f" % (i, loss)
 
     # compute the gradient on scores
     dscores = probs
@@ -53,21 +58,22 @@ for i in xrange(10000):
     # backprop the ReLU non-linearity
     dhidden[hidden_layer <= 0] = 0
     # finally into W,b
-    dW = np.dot(X.T, dhidden)
-    db = np.sum(dhidden, axis=0, keepdims=True)
+    dW1 = np.dot(X.T, dhidden)
+    db1 = np.sum(dhidden, axis=0, keepdims=True)
 
     # add regularization gradient contribution
     dW2 += reg * W2
-    dW += reg * W
+    dW1 += reg * W1
 
     # perform a parameter update
-    W += -step_size * dW
-    b += -step_size * db
+    W1 += -step_size * dW1
+    b1 += -step_size * db1
     W2 += -step_size * dW2
     b2 += -step_size * db2
 
 # evaluate training set accuracy
-hidden_layer = np.maximum(0, np.dot(X, W) + b)
+hidden_layer = np.maximum(0, np.dot(X, W1) + b1)
 scores = np.dot(hidden_layer, W2) + b2
 predicted_class = np.argmax(scores, axis=1)
-print 'training accuracy: %.2f' % (np.mean(predicted_class == y))
+#print 'training accuracy: %.2f' % (np.mean(predicted_class == y))
+print(np.sum(W1)+np.sum(b1))

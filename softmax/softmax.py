@@ -2,20 +2,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 
-with open('data.pickle') as f:
-    X, y, W, b = pickle.load(f)
-
-#X = np.float32(X)
-#W = np.float32(W)
-#b = np.float32(b)
-
-# some hyperparameters
-step_size = 1
-reg = 1e-3  # regularization strength
+# Number of training steps
 training_steps = 20000
 
+# Load data
+with open('../data.pickle') as f:
+    X, y, W, b = pickle.load(f)
+X = np.float32(X)
+W = np.float32(W)
+b = np.float32(b)
+num_examples = np.float32(X.shape[0])
+num_dimensions = X.shape[1]  # dimensionality
+num_labels = len(np.unique(y))  # number of classes
+
+# some hyperparameters
+step_size = np.float32(1)
+reg = np.float32(1e-3)  # regularization strength
+
 # gradient descent loop
-num_examples = X.shape[0]
+
 for i in xrange(training_steps):
 
     # evaluate class scores, [N x K]
@@ -28,7 +33,7 @@ for i in xrange(training_steps):
     # compute the loss: average cross-entropy loss and regularization
     corect_logprobs = -np.log(probs[range(num_examples), y])
     data_loss = np.sum(corect_logprobs) / num_examples
-    reg_loss = 0.5 * reg * np.sum(W * W)
+    reg_loss = np.float32(0.5) * reg * np.sum(W * W)
     loss = data_loss + reg_loss
     print "iteration %d: loss %f" % (i, loss)
 

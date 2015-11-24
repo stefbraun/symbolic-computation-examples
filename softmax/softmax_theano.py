@@ -4,16 +4,20 @@ import theano
 import theano.tensor as T
 import pickle
 
+# Number of training steps
+training_steps = 20000
 
-with open('data.pickle') as f:
+# Load data
+with open('../data.pickle') as f:
     X_inp, y_inp, W_inp, b_inp = pickle.load(f)
 X_inp=np.float32(X_inp)
 W_inp=np.float32(W_inp)
 b_inp=np.float32(b_inp)
-
 num_examples = X_inp.shape[0]
-reg_inp = 1e-3
-training_steps = 20000
+
+# some hyperparameters
+step_size = np.float32(1)
+reg_inp = np.float32(1e-3)  # regularization strength
 
 # Declare Theano symbolic variables
 X = T.matrix('X')
@@ -59,3 +63,4 @@ for i in xrange(training_steps):
     print "iteration %d: loss %f" % (i, err[0])
     print csum_val
 
+5+5

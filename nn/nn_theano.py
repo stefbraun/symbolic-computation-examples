@@ -4,23 +4,28 @@ import pickle
 import theano.tensor as T
 import theano
 
-with open('data.pickle') as f:
-    X_inp, y_inp, cl1, cl2 = pickle.load(f)
-X_inp=np.float32(X_inp)
+# Number of training steps
+training_steps = 20000
 
-D = 2  # dimensionality
-K = 3  # number of classes
+# Load data
+with open('../data.pickle') as f:
+    X_inp, y_cat, cl1, cl2 = pickle.load(f)
+X_inp = np.float32(X_inp)
+y_inp = y_cat
+num_examples = X_inp.shape[0]
+num_dimensions = X_inp.shape[1]  # dimensionality
+num_labels = len(np.unique(y_cat))  # number of classes
 
-# initialize parameters randomly
+# Initialize parameters randomly
 h = 100  # size of hidden layer
-W1_inp = 0.01 * np.ones((D, h))
-b1_inp = np.zeros((1, h))
-W2_inp = 0.01 * np.eye(h, K)
-b2_inp = np.zeros((1, K))
+W1_inp = np.float32(0.01 * np.ones((num_dimensions, h)))
+b1_inp = np.float32(np.zeros((1, h)))
+W2_inp = np.float32(0.01 * np.eye(h, num_labels))
+b2_inp = np.float32(np.zeros((1, num_labels)))
 
-# some hyperparameters
-step_size = 1e-0
-reg_inp = 1e-3  # regularization strength
+# Some hyperparameters
+step_size = np.float32(1e-0)
+reg_inp = np.float32(1e-3)  # regularization strength
 
 # Declare Theano symbolic variables
 X = T.matrix(name='X')
@@ -32,15 +37,11 @@ b2 = theano.shared(b2_inp, name='b2', broadcastable=(True, False))
 reg = T.scalar('reg')
 
 # gradient descent loop
-num_examples = X_inp.shape[0]
 
-for i in xrange(1000):
-
+for i in xrange(training_steps):
     # evaluate class scores, [N x K]
     hidden_layer = T.maximum(0, T.dot(X, W1) + b1)
-
     scores = T.dot(hidden_layer, W2) + b2
-
 
     # compute the class probabilities
     p_y_given_x = T.nnet.softmax(scores)  # same as probs
@@ -61,5 +62,6 @@ for i in xrange(1000):
                             updates=[(W1, W1 - gw1), (b1, b1 - gb1), (W2, W2 - gw2), (b2, b2 - gb2)])
 
     loss_val = train(X_inp, y_inp, reg_inp)
-    if i % 10 == 0:
-        print "iteration %d: loss_sym %f" % (i, loss_val[0])
+    print "iteration %d: loss_sym %f" % (i, loss_val[0])
+    csum_val = np.sum(W1.get_value()) + np.sum(b1.get_value())
+    print csum_val

@@ -3,24 +3,23 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import pickle
 
-# Parameters
-reg_inp = 1e-3
+# Number of training steps
 training_steps = 20000
 
 # Start TensorFlow session
 sess = tf.InteractiveSession()
 
-with open('data.pickle') as f:
+with open('../data.pickle') as f:
     X_inp, y_cat, W_inp, b_inp = pickle.load(f)
-
-#Get sample and label count
-num_examples = X_inp.shape[0]
-num_labels = len(np.unique(y_cat))
-
-# Convert to float32
 X_inp = np.float32(X_inp)
 W_inp = np.float32(W_inp)
 b_inp = np.float32(b_inp)
+num_examples = X_inp.shape[0]
+num_labels = len(np.unique(y_cat))
+
+# some hyperparameters
+step_size = np.float32(1)
+reg_inp = np.float32(1e-3)  # regularization strength
 
 # Convert label vector to one hot variant
 y_inp = np.eye(3)[y_cat]
@@ -56,3 +55,4 @@ for i in range(training_steps):
     train_step.run(feed_dict={X: X_inp, y_: y_inp})
     print(np.sum(W.eval())+np.sum(b.eval()))
 
+5+5

@@ -4,7 +4,6 @@ import theano
 import theano.tensor as T
 import pickle
 
-prec = 'float32'
 with open('../data.pickle') as f:
     X_inp, y_inp, W_inp, b_inp = pickle.load(f)
 X_inp=X_inp.astype(prec)
@@ -95,3 +94,4 @@ for i in xrange(training_steps):
     print err[0]
     print np.sum(W_inp) + np.sum(b_inp)
 
+5+5
